@@ -1,0 +1,162 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<string>
+#include<sstream>
+using namespace std;
+struct HocVien{
+	int mahv;
+	string tenhv,lop,chuyennganh;
+	float diemtk;
+};
+struct node{
+	HocVien data;
+	node *next;
+};
+struct list{
+	node *tail;
+	node *head;
+};
+void xuat(HocVien hv);
+void create_list(list &l)
+{
+	l.head=l.tail=NULL;
+}
+node *create_node(HocVien &sv)
+{
+	node* p = new node;
+	if(p==NULL)
+	{
+		cout<<"Khong du bo nho ";
+		exit(1);
+	}
+	p->data=sv;
+	p->next=NULL;
+	return p;
+}
+void add_tail(list &l,node *p)
+{
+	if(l.head==NULL)
+	{
+		l.head=l.tail=p;
+	}
+	else
+	{
+		l.tail->next=p;
+		l.tail=p;
+	}
+}
+node *search(list &l)
+{
+	for(node *p= l.head;p!=NULL;p=p->next)
+	{
+		if(p->data.diemtk>=8 && p->data.chuyennganh=="Thuong mai dien tu")
+		{
+			return p;
+		}
+	}
+}
+void check(list &l)
+{
+	node *q = search(l);
+	if(q!=NULL)
+	{
+		cout<<"\nDanh sach Hoc Vien diem >= 8.0 co chuyen nganh thuong mai dien tu :\n";
+		for(node *p= l.head;p!=NULL;p=p->next)
+		{
+			if(p->data.diemtk>=8 && p->data.chuyennganh=="Thuong mai dien tu")
+			{
+				xuat(p->data);
+			}
+		}
+	}
+	else
+	{
+		cout<<"\nKhong co Hoc Vien hop le\n";
+	}
+}
+void nhap(HocVien &hv)
+{
+	cout<<"Ma hoc vien : ";
+	cin>>hv.mahv;
+	cout<<"Ten hoc vien : ";
+	fflush(stdin);
+	getline(cin,hv.tenhv);
+	cout<<"Lop : ";
+	fflush(stdin);
+	getline(cin,hv.lop);
+	cout<<"Chuyen nganh : ";
+	fflush(stdin);
+	getline(cin,hv.chuyennganh);
+	cout<<"Diem tong ket : ";
+	cin>>hv.diemtk;
+}
+void xuat(HocVien hv)
+{
+	cout<<hv.mahv<<" "<<hv.tenhv<<" "<<hv.lop<<" "<<hv.chuyennganh<<" "<<hv.diemtk<<endl;
+}
+void input(list &l)
+{
+	int n;
+	cout<<"Tong so Hoc Vien : ";
+	cin>>n;
+	for(int i=0;i<n;i++)
+	{
+		HocVien hv;
+		cout<<"Hoc Vien : "<<i<<" :\n";
+		nhap(hv);
+		cout<<endl;
+		node *p = create_node(hv);
+		if(p!=NULL)
+		{
+			add_tail(l,p);
+		}
+	}
+}
+void output(list &l)
+{
+	cout<<"\nDanh sach Hoc Vien :\n";
+	for(node *p = l.head;p!=NULL;p=p->next)
+	{
+		xuat(p->data);
+	}
+}
+string tach_name(string s)
+{
+	stringstream ss(s);
+	string w;
+	vector<string> v;
+	while(ss>>w)
+	{
+		v.push_back(w);
+	}
+	return v[v.size()-1];
+}
+void sort_name(list &l)
+{
+	cout<<"\nDanh sach Hoc Vien sap xep theo ten :\n";
+	for(node *p=l.head;p!=NULL;p=p->next)
+	{
+		for(node *q = p->next;q!=NULL;q=q->next)
+		{
+			if(tach_name(p->data.tenhv)>tach_name(q->data.tenhv))
+			{
+				swap(p->data,q->data);
+			}
+		}
+	}
+	for(node *p = l.head;p!=NULL;p=p->next)
+	{
+		xuat(p->data);
+	}
+}
+int main()
+{
+	list l;
+	create_list(l);
+	input(l);
+	output(l);
+	check(l);
+	sort_name(l);
+	return 0;
+}
