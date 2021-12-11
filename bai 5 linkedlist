@@ -1,0 +1,145 @@
+#include<iostream>
+#include<stdio.h>
+using namespace std;
+struct HocSinh{
+	char ID[6];
+	char ho_ten[80];
+	int nam_sinh;
+	char lop[100];
+	float diem_tk;
+};
+struct node{
+	HocSinh data;
+	node *next;
+};
+struct list{
+	node *tail;
+	node *head;
+};
+void create_list(list &l)
+{
+	l.head=l.tail=NULL;
+}
+node *create_node(HocSinh &hs)
+{
+	node *p =new node;
+	if(p==NULL)
+	{
+		cout<<"khong du bo nho";
+	}
+	p->data = hs;
+	p->next=NULL;
+	return p;
+}
+void add_tail(list &l,node *p)
+{
+	if(l.head==NULL)
+	{
+		l.head=l.tail=p;
+	}
+	else
+	{
+		l.tail->next=p;
+		l.tail=p;
+	}
+}
+void add_head(list &l,node *p)
+{
+	if(l.head==NULL)
+	{
+		l.head=l.tail=p;
+	}
+	else
+	{
+		p->next=l.head;
+		l.head=p;
+	}
+}
+void nhap(HocSinh &hs)
+{
+	cout<<"ID : ";
+	fflush(stdin);
+	gets(hs.ID);
+	cout<<"Ho ten : ";
+	fflush(stdin);
+	gets(hs.ho_ten);
+	cout<<"Nam sinh : ";
+	cin>>hs.nam_sinh;
+	cout<<"Lop : ";
+	fflush(stdin);
+	gets(hs.lop);
+	cout<<"Diem tong ket : ";
+	cin>>hs.diem_tk;
+}
+void xuat(HocSinh hs)
+{
+	cout<<hs.ID<<" "<<hs.ho_ten<<" "<<hs.lop<<" "<<hs.nam_sinh<<" "<<hs.diem_tk<<endl;
+}
+void input(list &l)
+{
+	int n;
+	cout<<"Tong so hoc sinh : ";
+	cin>>n;
+	cout<<"Nhap thong  tin Hoc Sinh :\n";
+	for(int i=0;i<n;i++)
+	{
+		cout<<"Hoc Sinh "<<i+1<<" :\n";
+		HocSinh hs;
+		nhap(hs);
+		cout<<endl;
+		node *p = create_node(hs);
+		if(p!=NULL)
+		{
+			add_tail(l,p);
+		}
+	}
+}
+void add_ele(list &l)
+{
+	cout<<"Nhap thong tin Hoc Sinh can them : \n";
+	HocSinh hs;
+	nhap(hs);
+	node *p = create_node(hs);
+	add_head(l,p);
+}
+void output(list &l)
+{
+	cout<<"\nThong tin Hoc Sinh :\n";
+	for(node *p =l.head;p!=NULL;p=p->next)
+	{
+		xuat(p->data);
+	}
+}
+void max_diem(list &l)
+{
+	float max=l.head->data.diem_tk;
+	for(node *p =l.head;p!=NULL;p=p->next)
+	{
+		if(max<p->data.diem_tk)
+		{
+			max=p->data.diem_tk;
+		}
+	}
+	cout<<"Thong tin Hoc Sinh co diem tong ket cao :\n";
+	for(node *p =l.head;p!=NULL;p=p->next)
+	{
+		if(p->data.diem_tk==max)
+		{
+			xuat(p->data);
+		}
+	}
+}
+int main()
+{
+	HocSinh hs;
+	nhap(hs);
+	xuat(hs);
+	list l;
+	create_list(l);
+	input(l);
+	output(l);
+	max_diem(l);
+	add_ele(l);
+	output(l);
+	return 0;
+}
