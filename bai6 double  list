@@ -1,0 +1,151 @@
+#include<iostream>
+#include<stdio.h>
+#include<string.h>
+using namespace std;
+struct KhachHang{
+	int makh;
+	char tenkh[50];
+	char diachi[50];
+	char sodt[15];
+	float tongtien;
+};
+struct node{
+	KhachHang data;
+	node *next;
+	node *prev;
+};
+struct list{
+	node *head;
+	node *tail;
+};
+void create_list(list &l)
+{
+	l.head=l.tail=NULL;
+}
+node *create_node(KhachHang &kh)
+{
+	node *p = new node;
+	if(p==NULL)
+	{
+		cout<<"khong du bo nho";
+		exit(1);
+	}
+	p->data = kh;
+	p->next=NULL;
+	p->prev=NULL;
+	return p;
+}
+node *search_node(list &l)
+{
+	for(node *p=l.head;p!=NULL;p=p->next)
+	{
+		if(strcmp(p->data.diachi,"Ha Noi")==0)
+		{
+			return p;
+		}
+	}
+}
+void add_tail(list &l,node *p)
+{
+	if(l.head==NULL)
+	{
+		l.head=l.tail=p;
+	}
+	else
+	{
+		l.tail->next=p;
+		p->prev=l.tail;
+		l.tail=p;
+	}
+}
+void nhap(KhachHang &kh)
+{
+	cout<<"Ma khach hang : ";
+	cin>>kh.makh;
+	cout<<"Ten khach hang : ";
+	fflush(stdin);
+	gets(kh.tenkh);
+	cout<<"Dia chi : ";
+	fflush(stdin);
+	gets(kh.diachi);
+	cout<<"So dien thoai : ";
+	fflush(stdin);
+	gets(kh.sodt);
+	cout<<"Tong thanh toan : ";
+	cin>>kh.tongtien;
+}
+void xuat(KhachHang kh)
+{
+	cout<<kh.makh<<" "<<kh.tenkh<<" "<<kh.diachi<<" "<<kh.sodt<<" "<<kh.tongtien<<endl;
+}
+void input(list &l)
+{
+	int n;
+	cout<<"Tong so Khach Hang : ";
+	cin>>n;
+	cout<<"Nhap thong tin Khach Hang :\n";
+	for(int i=0;i<n;i++)
+	{
+		KhachHang kh;
+		cout<<"Khach Hang "<<i+1<<" :\n";
+		nhap(kh);
+		cout<<endl;
+		node *p=create_node(kh);
+		if(p!=NULL)
+		{
+			add_tail(l,p);
+		}
+	}
+}
+void output(list l)
+{
+	cout<<"Thong tin khach hang : \n";	
+	for(node *p=l.head;p!=NULL;p=p->next)
+	{
+		xuat(p->data);
+	}
+}
+void check_HN(list &l)
+{
+	node *q = search_node(l);
+	if(q!=NULL)
+	{
+		cout<<"Thong tin khach hang o HN :\n";
+		for(node *p=l.head;p!=NULL;p=p->next)
+		{
+			if(strcmp(p->data.diachi,"Ha Noi")==0)
+			{
+				xuat(p->data);
+			}
+		}
+	}
+	else
+	{
+		cout<<"\nKhong co khach hang o Ha Noi\n";
+	}
+}
+void sort_tien(list &l)
+{
+	cout<<"Thong tin khach hang sap xep theo tien giam dan : \n";
+	for(node *p=l.head;p!=NULL;p=p->next)
+	{
+		for(node *q=p->next;q!=NULL;q=q->next)
+		{
+			if(p->data.tongtien<q->data.tongtien)
+			{
+				swap(p->data,q->data);
+			}
+		}
+	}
+	output(l);
+}
+int main()
+{
+	list l;
+	create_list(l);
+	input(l);
+	output(l);
+	check_HN(l);
+	sort_tien(l);
+	return 0;
+}
