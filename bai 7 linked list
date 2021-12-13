@@ -1,0 +1,113 @@
+#include<iostream>
+using namespace std;
+struct Sach{
+	string masach,tensach,tentg;
+	int namsx;
+	float giathanh;
+};
+struct node{
+	Sach data;
+	node *next;
+};
+struct list{
+	node *tail;
+	node *head;
+};
+void create_list(list &l)
+{
+	l.head=l.tail=NULL;
+}
+node *create_node(Sach &s)
+{
+	node *p=new node;
+	if(p==NULL)
+	{
+		cout<<"Khong du bo nho";
+		exit(1);
+	}
+	p->data = s;
+	p->next=NULL;
+	return p;
+}
+void add_tail(list &l,node *p)
+{
+	if(l.head==NULL)
+	{
+		l.head=l.tail=p;
+	}
+	else
+	{
+		l.tail->next=p;
+		l.tail=p;
+	}
+}
+void nhap(Sach &s)
+{
+	fflush(stdin);
+	cout<<"Ma sach : ";
+	getline(cin,s.masach);
+	cout<<"Ten sach : ";
+	getline(cin,s.tensach);
+	cout<<"Ten tac gia : ";
+	getline(cin,s.tentg);
+	cout<<"Nam san xuat : ";
+	cin>>s.namsx;
+	cout<<"Gia thanh : ";
+	cin>>s.giathanh;
+}
+void xuat(Sach s)
+{
+	cout<<s.masach<<" "<<s.tensach<<" "<<s.tentg<<" "<<s.namsx<<" "<<s.giathanh<<endl;
+}
+void input(list &l)
+{
+	int n;
+	cout<<"Tong so sach : ";
+	cin>>n;
+	cout<<"Nhap thong tin sach :\n";
+	for(int i=0;i<n;i++)
+	{
+		Sach s;
+		cout<<"Sach "<<i+1<<" :\n";
+		nhap(s);
+		cout<<endl;
+		node *p=create_node(s);
+		if(p!=NULL)
+		{
+			add_tail(l,p);
+		}
+	}
+}
+void output(list l)
+{
+	cout<<"\nThong tin sach : \n";
+	for(node *p=l.head;p!=NULL;p=p->next)
+	{
+		xuat(p->data);
+	}
+}
+void sort_nam(list &l)
+{
+	for(node *p=l.head;p!=NULL;p=p->next)
+	{
+		for(node *q=p->next;q!=NULL;q=q->next)
+		{
+			if(p->data.namsx>q->data.namsx)
+			{
+				swap(p->data,q->data);
+			}
+		}
+	}
+	cout<<endl;
+	cout<<"Thong tin sach sap xep  theo nam tang :\n";
+	output(l);
+}
+int main()
+{
+	list l;
+	create_list(l);
+	input(l);
+	output(l);
+	sort_nam(l);
+	return 0;
+}
