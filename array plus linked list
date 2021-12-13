@@ -1,0 +1,159 @@
+#include<iostream>
+using namespace std;
+struct node{
+	int data;
+	node *next;
+};
+struct list{
+	node *tail;
+	node *head;
+};
+void create_list(list &l)
+{
+	l.head=l.tail=NULL;
+}
+node *create_node(int x)
+{
+	node *p = new  node;
+	if(p==NULL)
+	{
+		cout<<"Khong du bo nho";
+		exit(1);
+	}
+	p->data =x;
+	p->next=NULL;
+	return p;
+}
+void add_tail(list &l,node  *p)
+{
+	if(l.head==NULL)
+	{
+		l.head=l.tail=p;
+	}
+	else
+	{
+		l.tail->next=p;
+		l.tail=p;
+	}
+}
+void input(list &l)
+{
+	int  n;
+	cout<<"Tong so phan tu : ";
+	cin>>n;
+	cout<<"Nhap mang : \n";
+	for(int i=0;i<n;i++)
+	{
+		int x;
+		cin>>x;
+		node *p = create_node(x);
+		if(p!=NULL)
+		{
+			add_tail(l,p);
+		}
+	}
+}
+void output(list l)
+{
+	cout<<"\nXuat mang :\n";
+	for(node *p=l.head;p!=NULL;p=p->next)
+	{
+		cout<<p->data<<" ";
+	}
+}
+void max_min(list l)
+{
+	int max = l.head->data;
+	int min = l.head->data;
+	int count=0,count1=0;
+	while(l.head!=NULL)
+	{
+		if(l.head->data>0)
+		{
+			if(max<l.head->data)
+			{
+				max=l.head->data;	
+			}
+			count++;
+		}
+		else if(l.head->data<0)
+		{
+			if(min>l.head->data)
+			{
+				min=l.head->data;	
+			}
+			count1++;
+		}
+		l.head=l.head->next;
+	}
+	if(count!=0)
+	{
+		cout<<"\nMax = "<<max;
+	}
+	else
+	{
+		cout<<"\n";
+	}
+	if(count1!=0)
+	{
+		cout<<"\nMin = "<<min;
+	}
+	else
+	{
+		cout<<"\n";
+	}
+}
+int check(list l,int x)
+{
+	int count=0;
+	for(node *p=l.head;p!=NULL;p=p->next)
+	{
+		if(p->data==x)
+		{
+			count++;
+		}
+	}
+	return count;
+}
+void dele_x(list &l,int x)
+{
+	node * p = l.head, *q  = l.head;
+	while(p != NULL)
+	{
+		if(p->data == x)
+		{
+			if(p == l.head)
+			{
+				l.head = p->next;
+				delete(p);
+				p = l.head;
+			}			
+			else
+			{
+				node *r = l.head;
+				while(r->next != p)
+				{
+					r = r->next;
+				}
+				r->next = p->next;
+				delete(p);
+				p = r->next;
+			}
+		}else p = p->next;
+	}
+}
+int main()
+{
+	list l;
+	create_list(l);
+	input(l);
+//	output(l);
+//	max_min(l);
+	int x;
+	cout<<"Nhap x : ";
+	cin>>x;
+	cout<<"Tong phan tu gia  tri "<<x<<" : "<<check(l,x);
+	dele_x(l,x);
+	output(l);
+	return 0;
+}
